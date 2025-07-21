@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>森林火灾应急响应效能对比</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        #chart-container {
+            width: 1000px;
+            height: 650px;
+            margin: 20px auto;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+        .comparison-container {
+            display: flex;
+            margin-top: 30px;
+        }
+        .radar-chart {
+            width: 40%;
+            height: 400px;
+        }
+        .bar-chart {
+            width: 60%;
+            height: 400px;
+            padding-left: 20px;
+        }
+        .data-card {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .card {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            width: 22%;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .card-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #c23531;
+            margin: 10px 0;
+        }
+        .card-label {
+            font-size: 12px;
+            color: #666;
+        }
+        .improvement {
+            color: #61a0a8;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div id="chart-container">
+    <div class="header">
+        <h1>森林火灾应急响应效能对比</h1>
+        <div class="subtitle">传统方式 vs 无人机系统 | 基于2022-2023年实战数据</div>
+    </div>
+
+    <div class="comparison-container">
+        <div class="radar-chart" id="radar-chart"></div>
+        <div class="bar-chart" id="bar-chart"></div>
+    </div>
+
+    <div class="data-card">
+        <div class="card">
+            <div class="card-label">火情发现时间</div>
+            <div class="card-value">57min</div>
+            <div class="card-label"><span class="improvement">提前</span></div>
+        </div>
+        <div class="card">
+            <div class="card-label">火情确认时间</div>
+            <div class="card-value">115min</div>
+            <div class="card-label"><span class="improvement">提前</span></div>
+        </div>
+        <div class="card">
+            <div class="card-label">分析精度</div>
+            <div class="card-value">300%</div>
+            <div class="card-label"><span class="improvement">提升</span></div>
+        </div>
+        <div class="card">
+            <div class="card-label">过火面积</div>
+            <div class="card-value">73%</div>
+            <div class="card-label"><span class="improvement">减少</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 雷达图 - 响应能力对比
+    var radarChart = echarts.init(document.getElementById('radar-chart'));
+    var radarOption = {
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            data: ['传统方式', '无人机系统'],
+            bottom: 10
+        },
+        radar: {
+            indicator: [
+                { name: '响应速度', max: 100 },
+                { name: '分析精度', max: 100 },
+                { name: '处置效果', max: 100 },
+                { name: '覆盖范围', max: 100 },
+                { name: '安全系数', max: 100 }
+            ],
+            radius: '65%',
+            splitNumber: 4,
+            axisName: {
+                color: '#333'
+            },
+            splitArea: {
+                areaStyle: {
+                    color: ['rgba(255, 255, 255, 0.5)'],
+                    shadowColor: 'rgba(0, 0, 0, 0.2)',
+                    shadowBlur: 10
+                }
+            },
+            axisLine: {
+                lineStyle: {
+                    color: 'rgba(0, 0, 0, 0.2)'
+                }
+            },
+            splitLine: {
+                lineStyle: {
+                    color: 'rgba(0, 0, 0, 0.2)'
+                }
+            }
+        },
+        series: [{
+            name: '效能对比',
+            type: 'radar',
+            data: [
+                {
+                    value: [35, 25, 40, 30, 50],
+                    name: '传统方式',
+                    itemStyle: {
+                        color: '#dd6b66'
+                    },
+                    areaStyle: {
+                        color: 'rgba(221, 107, 102, 0.3)'
+                    }
+                },
+                {
+                    value: [90, 85, 95, 80, 75],
+                    name: '无人机系统',
+                    itemStyle: {
+                        color: '#61a0a8'
+                    },
+                    areaStyle: {
+                        color: 'rgba(97, 160, 168, 0.3)'
+                    }
+                }
+            ]
+        }]
+    };
+
+    // 柱状图 - 时间对比
+    var barChart = echarts.init(document.getElementById('bar-chart'));
+    var barOption = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            name: '时间（分钟）',
+            axisLine: {
+                lineStyle: {
+                    color: '#999'
+                }
+            },
+            axisLabel: {
+                formatter: '{value}'
+            }
+        },
+        yAxis: {
+            type: 'category',
+            data: ['火情发现', '火情确认'],
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            }
+        },
+        series: [
+            {
+                name: '传统方式',
+                type: 'bar',
+                stack: 'total',
+                itemStyle: {
+                    color: '#dd6b66'
+                },
+                label: {
+                    show: true,
+                    position: 'inside',
+                    formatter: '{c}分钟'
+                },
+                data: [60, 120]
+            },
+            {
+                name: '无人机系统',
+                type: 'bar',
+                stack: 'total',
+                itemStyle: {
+                    color: '#61a0a8'
+                },
+                label: {
+                    show: true,
+                    position: 'inside',
+                    formatter: '{c}分钟'
+                },
+                data: [3, 5]
+            },
+            {
+                name: '提升效果',
+                type: 'bar',
+                itemStyle: {
+                    color: 'transparent'
+                },
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: function(params) {
+                        return params.dataIndex === 0 ? '提前57分钟' : '提前115分钟';
+                    },
+                    color: '#61a0a8',
+                    fontWeight: 'bold'
+                },
+                data: [63, 125]
+            }
+        ]
+    };
+
+    radarChart.setOption(radarOption);
+    barChart.setOption(barOption);
+
+    window.addEventListener('resize', function() {
+        radarChart.resize();
+        barChart.resize();
+    });
+</script>
+</body>
+</html>
